@@ -12,7 +12,10 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7c849cec-32d5-45cd-b80e-912c380ff027" name="Default Changelist" comment="" />
+    <list default="true" id="7c849cec-32d5-45cd-b80e-912c380ff027" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -29,7 +32,7 @@
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/app_find" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MacroExpansionManager">
     <option name="directoryName" value="o18pj3hi" />
@@ -56,10 +59,20 @@
     <property name="org.rust.cargo.project.model.PROJECT_DISCOVERY" value="true" />
     <property name="settings.editor.selected.configurable" value="CMakeSettings" />
   </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Development\rust\cli\app_find\src\runnable_file" />
+    </key>
+  </component>
   <component name="RunManager">
+    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="run" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
       <option name="channel" value="DEFAULT" />
-      <option name="command" value="run --bin app_find" />
+      <option name="command" value="run --bin app_find Paint" />
       <option name="allFeatures" value="false" />
       <option name="emulateTerminal" value="false" />
       <option name="backtrace" value="SHORT" />
@@ -67,11 +80,6 @@
       <envs />
       <method v="2">
         <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="GradleAppRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" PASS_PARENT_ENVS_2="true">
-      <method v="2">
-        <option name="com.jetbrains.cidr.cpp.gradle.execution.GradleNativeBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
   </component>
@@ -93,7 +101,8 @@
       <workItem from="1602362452200" duration="90000" />
       <workItem from="1602362561224" duration="21533000" />
       <workItem from="1602460650450" duration="4282000" />
-      <workItem from="1602724214259" duration="8150000" />
+      <workItem from="1602724214259" duration="18917000" />
+      <workItem from="1602813244532" duration="5992000" />
     </task>
     <task id="LOCAL-00001" summary="some initial file traverse working">
       <created>1602732360447</created>
@@ -128,13 +137,5 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="some initial file traverse working" />
     <option name="LAST_COMMIT_MESSAGE" value="some initial file traverse working" />
-  </component>
-  <component name="XDebuggerManager">
-    <watches-manager>
-      <configuration name="CargoCommandRunConfiguration">
-        <watch expression="path.extension()" language="Rust" />
-        <watch expression="f_command" language="Rust" />
-      </configuration>
-    </watches-manager>
   </component>
 </project>

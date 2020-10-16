@@ -1,7 +1,7 @@
-use std::{fs, io};
+use std::{fs};
 use std::error::Error;
 use std::path::Path;
-use std::fs::{DirEntry, ReadDir, Metadata};
+use std::fs::{DirEntry, ReadDir};
 
 #[derive(Debug)]
 pub struct RecursiveDirTraversal {
