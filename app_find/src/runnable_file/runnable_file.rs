@@ -10,6 +10,7 @@ pub trait RunnableFileTrait {
     fn get_file_path(&self) -> &PathBuf;
 }
 
+#[derive(Debug, Clone)]
 pub enum RunnableFile {
     LnkFile(LnkFile),
     ExeFile(ExeFile),

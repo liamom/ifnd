@@ -8,6 +8,7 @@ use crate::runnable_file::runnable_file::RunnableFileTrait;
 use std::ffi::OsStr;
 use std::ops::Deref;
 
+#[derive(Debug, Clone)]
 pub struct LnkFile {
     _lnk: Lnk,
     path: PathBuf,

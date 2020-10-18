@@ -4,6 +4,7 @@ use std::error::Error;
 use std::ffi::OsStr;
 use std::process::Command;
 
+#[derive(Debug, Clone)]
 pub struct ExeFile {
     path: PathBuf
 }

@@ -17,7 +17,6 @@
   <component name="ChangeListManager">
     <list default="true" id="7c849cec-32d5-45cd-b80e-912c380ff027" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -123,7 +122,7 @@
       <workItem from="1602813244532" duration="6622000" />
       <workItem from="1602962254290" duration="13128000" />
       <workItem from="1603045337202" duration="1139000" />
-      <workItem from="1603046495898" duration="13506000" />
+      <workItem from="1603046495898" duration="17158000" />
     </task>
     <task id="LOCAL-00001" summary="some initial file traverse working">
       <created>1602732360447</created>
@@ -169,7 +168,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/app_find/src/main.rs</url>
-          <line>120</line>
+          <line>57</line>
           <option name="timeStamp" value="4" />
         </line-breakpoint>
       </breakpoints>
