@@ -4,12 +4,14 @@ use crossterm::{execute, queue, style::{self, Colorize}, cursor, terminal, Queue
 use crossterm;
 use std::error::Error;
 use crossterm::cursor::{SavePosition, RestorePosition};
+use crate::OrderedType;
 
 // pub fn print_view<'a, I>(cursor_pos: usize, search_text: &str, list: &mut I) -> crossterm::Result<()>
-pub fn print_view(cursor_pos: usize,
+pub fn print_view<'a, I>(cursor_pos: usize,
                       search_text: &str,
-                      list: &Vec<&RunnableFile>)
+                      list: &mut I)
     -> crossterm::Result<()>
+    where I: Iterator<Item = &'a OrderedType<'a>>
 {
     let mut stdout = stdout();
 
@@ -24,10 +26,12 @@ pub fn print_view(cursor_pos: usize,
         .queue(SavePosition)?;
 
     let mut counter = 1;
-    for file in list {
+    for ot in list {
+        let file = ot.file;
         let pysical_row = start_row + counter;
-        let mut list_text = format!("{:>3}: {:<50} - {}",
+        let mut list_text = format!("{:>3} ({:>3}): {:<50} - {}",
                 counter,
+                ot.score,
                 file.get_file_path().file_name()
                      .and_then(|v| v.to_str())
                      .unwrap_or(""),
