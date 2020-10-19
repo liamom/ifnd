@@ -10,7 +10,7 @@ use crate::ordered_type::OrderedSearchMatch;
 pub fn print_view<'a, I>(cursor_pos: usize,
                       search_text: &str,
                       list: &mut I)
-    -> crossterm::Result<()>
+    -> Result<usize, Box<dyn Error>>
     where I: Iterator<Item = &'a OrderedSearchMatch<'a>>
 {
     let mut stdout = stdout();
@@ -87,5 +87,5 @@ pub fn print_view<'a, I>(cursor_pos: usize,
         .queue(RestorePosition)?
         .flush()?;
 
-    Ok(())
+    Ok(counter as usize)
 }

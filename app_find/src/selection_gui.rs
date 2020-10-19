@@ -10,15 +10,86 @@ use std::error::Error;
 use std::sync::mpsc::Receiver;
 use crate::ordered_type::OrderedSearchMatch;
 
-pub fn run_selection_gui(receiver: Receiver<RunnableFile>) -> Result<RunnableFile, Box<dyn Error>> {
-    let mut search_str = String::new();
+struct FilteredList<'a> {
+    filtered_list: BTreeMap<i64, OrderedSearchMatch<'a>>,
+}
 
+impl <'a> FilteredList <'a>{
+    fn empty() -> Self {
+        FilteredList {
+            filtered_list: BTreeMap::new(),
+        }
+    }
+
+    fn new(commands: &'a Vec<RunnableFile>, search_str: &str, matcher: &SkimMatcherV2) -> Self {
+        let filtered_list: BTreeMap<i64, OrderedSearchMatch> = commands.iter()
+            .map(|i| {
+                let choice = &i.get_file_path().to_str().unwrap();
+                let (score, indices) = matcher.fuzzy_indices(choice, search_str)
+                    .unwrap_or_else(|| (0, Vec::new()));
+                return (score, OrderedSearchMatch {
+                    score,
+                    indices,
+                    file: i
+                });
+            })
+            .collect();
+
+        FilteredList {
+            filtered_list,
+        }
+    }
+
+    fn iter(&'a self, page: usize) -> impl Iterator<Item = &'a OrderedSearchMatch> {
+        let mut a = self.filtered_list.iter().rev()
+            .skip(page * 25)
+            .take(25)
+            .map(|(a, b)| b);
+        return a;
+    }
+}
+
+// fn get_filtered_list<'a>(matcher: &SkimMatcherV2, commands: &'a Vec<RunnableFile>, search_str: &str, page: usize)
+//     -> (BTreeMap<i64, OrderedSearchMatch<'a>>, impl Iterator<Item = (&'a OrderedSearchMatch<'a>)>)
+// {
+//     let filtered_list: BTreeMap<i64, OrderedSearchMatch> = commands.iter()
+//         .map(|i| {
+//             let choice = &i.get_file_path().to_str().unwrap();
+//             let (score, indices) = matcher.fuzzy_indices(choice, search_str)
+//                 .unwrap_or_else(|| (0, Vec::new()));
+//             return (score, OrderedSearchMatch {
+//                 score,
+//                 indices,
+//                 file: i
+//             });
+//         })
+//         .collect();
+//
+//     let b = filtered_list.iter();
+//     let mut a = filtered_list.iter().rev()
+//         .skip(page * 25)
+//         .take(25)
+//         .map(|(a, b)| b);
+//
+//     return (filtered_list, a);
+//     // let a =  FilteredListIter {
+//     //     filtered_list,
+//     // };
+//     FilteredList::new()
+// }
+
+pub fn run_selection_gui(receiver: Receiver<RunnableFile>) -> Result<RunnableFile, Box<dyn Error>> {
     let matcher = SkimMatcherV2::default();
 
-    let mut commands = Vec::new();
+    let mut search_str = String::new();
+
+    let mut need_rerender = true;
+    let mut all_files_cache = Vec::new();
 
     let mut cursor: usize = 0;
     let mut page = 0;
+
+    let mut items_displayed_on_current_page = 0;
 
     let selection: RunnableFile = 'outer: loop {
         while let Ok(result) = receiver.try_recv() {
@@ -28,49 +99,24 @@ pub fn run_selection_gui(receiver: Receiver<RunnableFile>) -> Result<RunnableFil
                 None => continue,
             };
 
-            commands.push(result);
+            all_files_cache.push(result);
+            need_rerender = true;
         }
 
-        // let a = BTreeMap::new();
-        // a.insert(1, "hi");
+        if need_rerender {
+            let mut list = FilteredList::new(&all_files_cache, search_str.as_str(), &matcher);
+            let mut a = list.iter(page);
 
-        let filtered_list: BTreeMap<i64, OrderedSearchMatch> = commands.iter()
-            .map(|i| {
-                // let choice = i.get_file_path().file_name().unwrap().to_str().unwrap();
-                let choice = &i.get_file_path().to_str().unwrap();
-                // .unwrap()[6..]
-                // .replace("\\", " ");
-                let (score, indices) = matcher.fuzzy_indices(choice, search_str.as_str())
-                    .unwrap_or_else(||(0, Vec::new()));
-                return (score, OrderedSearchMatch {
-                    score,
-                    indices,
-                    file: i
-                });
-            })
-            // .filter(|(i, ot)| *i != 0i64)
-            .collect();
-
-        /*
-                let filtered_list: Vec<&RunnableFile> = commands.iter()
-                    .filter(|file| {
-                        let buf = file.get_file_path().to_str().unwrap();
-                        return buf.to_lowercase().contains(&search_str.to_lowercase())
-                    })
-                    .take(25)
-                    .collect();
-        */
-        let mut a = filtered_list.iter().rev()
-            .skip(page*25)
-            .take(25)
-            .map(|(a,b)|b);
-        list_view::print_view(cursor,
-                              search_str.as_str(),
-                              &mut a).unwrap();
+            items_displayed_on_current_page = list_view::print_view(cursor,
+                                                                    search_str.as_str(),
+                                                                    &mut a).unwrap();
+            need_rerender = false;
+        }
 
 
         // `poll()` waits for an `Event` for a given time period
         if poll(Duration::from_millis(500))? {
+            need_rerender = true;
             // It's guaranteed that the `read()` won't block when the `poll()`
             // function returns `true`
             match read()? {
@@ -79,24 +125,30 @@ pub fn run_selection_gui(receiver: Receiver<RunnableFile>) -> Result<RunnableFil
                         Char(c) => {
                             search_str.push(c);
                         },
-                        Backspace => {search_str.pop();},
+                        Backspace => { search_str.pop(); },
 
                         KeyCode::Enter => {
-                            let it = filtered_list.iter().rev().skip(cursor - 1).next();
-
-                            break 'outer it.unwrap().1.file.clone();
+                            let mut list = FilteredList::new(
+                                &all_files_cache,
+                                search_str.as_str(),
+                                &matcher);
+                            let mut a = list.iter(page);
+                            let it = a.skip(cursor - 1).next();
+                            break 'outer it.unwrap().file.clone();
                             // break 'outer filtered_list[&index].file.clone();
                         },
                         KeyCode::Left => {}
                         KeyCode::Right => {}
-                        KeyCode::Up => cursor = match cursor {
-                            0|1 => 1,
-                            _ => cursor - 1,
+                        KeyCode::Up => {
+                            cursor = match cursor {
+                                0 | 1 => 1,
+                                _ => cursor - 1,
+                            }
                         },
                         // KeyCode::Up => cursor = min(0, cursor as i64 - 1) as usize,
                         // KeyCode::Down => cursor = max(commands.len(), cursor + 1),
                         KeyCode::Down => {
-                            let list_size = filtered_list.len();
+                            let list_size = items_displayed_on_current_page;
                             cursor = if cursor < list_size {
                                 cursor + 1
                             } else {
@@ -125,6 +177,7 @@ pub fn run_selection_gui(receiver: Receiver<RunnableFile>) -> Result<RunnableFil
                 _ => {},
             }
         } else {
+            need_rerender = false;
             // Timeout expired and no `Event` is available
         }
     };

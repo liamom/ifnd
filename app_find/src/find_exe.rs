@@ -102,7 +102,6 @@ pub fn print_start_menu() -> Result<AsyncFinder, Box<dyn Error>> {
         format!(r"{}\Microsoft\Windows\Start Menu\Programs", env::var("AppData")?),
         format!(r"{}\OneDrive\Desktop", env::var("USERPROFILE")?),
         format!(r"{}\Desktop", env::var("PUBLIC")?),
-        // format!(r"D:\"),
     ]
         .iter()
         .map(PathBuf::from)
