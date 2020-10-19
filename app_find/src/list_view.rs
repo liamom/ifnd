@@ -18,13 +18,21 @@ pub fn print_view<'a, I>(cursor_pos: usize,
     let (total_cols, _) = crossterm::terminal::size()?;
     let (start_col, start_row) = crossterm::cursor::position()?;
     stdout
-        // .queue(terminal::Clear(terminal::ClearType::All))?
         .queue(terminal::DisableLineWrap)?
         .queue(cursor::MoveTo(0, start_row))?
-        .queue(terminal::Clear(terminal::ClearType::CurrentLine))?
-        .queue(style::PrintStyledContent( "a ".magenta()))?
-        .queue(style::PrintStyledContent( search_text.cyan()))?
-        .queue(SavePosition)?;
+        .queue(terminal::Clear(terminal::ClearType::CurrentLine))?;
+
+    {
+        let mut iter = search_text.splitn(2, ' ');
+        if let Some(command) = iter.next() {
+            stdout.queue(style::PrintStyledContent(command.magenta()))?;
+            stdout.queue(style::Print(" "))?;
+        }
+        if let Some(search_str) = iter.next() {
+            stdout.queue(style::PrintStyledContent(search_str.cyan()))?;
+        }
+    }
+    stdout.queue(SavePosition)?;
 
     let mut counter = 1;
     for ot in list {

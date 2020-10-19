@@ -123,7 +123,7 @@
       <workItem from="1602962254290" duration="13128000" />
       <workItem from="1603045337202" duration="1139000" />
       <workItem from="1603046495898" duration="20610000" />
-      <workItem from="1603068886931" duration="3142000" />
+      <workItem from="1603068886931" duration="7044000" />
     </task>
     <task id="LOCAL-00001" summary="some initial file traverse working">
       <created>1602732360447</created>
@@ -169,7 +169,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/app_find/src/main.rs</url>
-          <line>57</line>
+          <line>58</line>
           <option name="timeStamp" value="4" />
         </line-breakpoint>
       </breakpoints>

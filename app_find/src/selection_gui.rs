@@ -1,7 +1,7 @@
 use crate::runnable_file::runnable_file::{RunnableFile, RunnableFileTrait};
 use fuzzy_matcher::skim::SkimMatcherV2;
 use std::collections::BTreeMap;
-use crate::{ordered_type, list_view};
+use crate::{ordered_type, list_view, find_exe};
 use fuzzy_matcher::FuzzyMatcher;
 use crossterm::event::{poll, read, Event, KeyCode};
 use crossterm::event::KeyCode::{Char, Backspace};
@@ -9,79 +9,50 @@ use std::time::Duration;
 use std::error::Error;
 use std::sync::mpsc::Receiver;
 use crate::ordered_type::OrderedSearchMatch;
+use crate::filtered_list::FilteredList;
 
-struct FilteredList<'a> {
-    filtered_list: BTreeMap<i64, OrderedSearchMatch<'a>>,
+struct AppSearch {
+    cache: Vec<RunnableFile>,
+    receiver: Receiver<RunnableFile>,
 }
 
-impl <'a> FilteredList <'a>{
-    fn empty() -> Self {
-        FilteredList {
-            filtered_list: BTreeMap::new(),
+impl AppSearch {
+    fn new() -> Self {
+        let finder = find_exe::print_start_menu().unwrap();
+        AppSearch {
+            cache: Vec::new(),
+            receiver: finder.receiver,
         }
     }
 
-    fn new(commands: &'a Vec<RunnableFile>, search_str: &str, matcher: &SkimMatcherV2) -> Self {
-        let filtered_list: BTreeMap<i64, OrderedSearchMatch> = commands.iter()
-            .map(|i| {
-                let choice = &i.get_file_path().to_str().unwrap();
-                let (score, indices) = matcher.fuzzy_indices(choice, search_str)
-                    .unwrap_or_else(|| (0, Vec::new()));
-                return (score, OrderedSearchMatch {
-                    score,
-                    indices,
-                    file: i
-                });
-            })
-            .collect();
+    fn check_for_updates(&mut self) -> bool {
+        while let Ok(result) = self.receiver.try_recv() {
+            let path = result.get_file_path();
+            let path_str = match path.to_str() {
+                Some(v) => v,
+                None => continue,
+            };
 
-        FilteredList {
-            filtered_list,
+            self.cache.push(result);
+            return true;
         }
-    }
 
-    fn iter(&'a self, page: usize) -> impl Iterator<Item = &'a OrderedSearchMatch> {
-        let mut a = self.filtered_list.iter().rev()
-            .skip(page * 25)
-            .take(25)
-            .map(|(a, b)| b);
-        return a;
+        return false;
     }
 }
 
-// fn get_filtered_list<'a>(matcher: &SkimMatcherV2, commands: &'a Vec<RunnableFile>, search_str: &str, page: usize)
-//     -> (BTreeMap<i64, OrderedSearchMatch<'a>>, impl Iterator<Item = (&'a OrderedSearchMatch<'a>)>)
-// {
-//     let filtered_list: BTreeMap<i64, OrderedSearchMatch> = commands.iter()
-//         .map(|i| {
-//             let choice = &i.get_file_path().to_str().unwrap();
-//             let (score, indices) = matcher.fuzzy_indices(choice, search_str)
-//                 .unwrap_or_else(|| (0, Vec::new()));
-//             return (score, OrderedSearchMatch {
-//                 score,
-//                 indices,
-//                 file: i
-//             });
-//         })
-//         .collect();
-//
-//     let b = filtered_list.iter();
-//     let mut a = filtered_list.iter().rev()
-//         .skip(page * 25)
-//         .take(25)
-//         .map(|(a, b)| b);
-//
-//     return (filtered_list, a);
-//     // let a =  FilteredListIter {
-//     //     filtered_list,
-//     // };
-//     FilteredList::new()
-// }
+enum SearchMode {
+    None,
+    AppSerach(AppSearch),
+}
 
 pub fn run_selection_gui(receiver: Receiver<RunnableFile>) -> Result<RunnableFile, Box<dyn Error>> {
     let matcher = SkimMatcherV2::default();
 
-    let mut search_str = String::new();
+    let mut search_mode = SearchMode::None;
+
+    // will have single letter prefix for mode
+    let mut input_search_str = String::new();
 
     let mut need_rerender = true;
     let mut all_files_cache = Vec::new();
@@ -92,6 +63,18 @@ pub fn run_selection_gui(receiver: Receiver<RunnableFile>) -> Result<RunnableFil
     let mut items_displayed_on_current_page = 0;
 
     let selection: RunnableFile = 'outer: loop {
+        let mut iter = input_search_str.splitn(2, ' ');
+        let command_str = iter.next().unwrap_or("");
+        let search_str = iter.next().unwrap_or("");
+
+        // set search mode
+        match command_str {
+            "a" => if let SearchMode::AppSerach(_) = search_mode {
+                    search_mode = SearchMode::AppSerach(AppSearch::new());
+            },
+            _ => (),
+        };
+
         while let Ok(result) = receiver.try_recv() {
             let path = result.get_file_path();
             let path_str = match path.to_str() {
@@ -104,11 +87,11 @@ pub fn run_selection_gui(receiver: Receiver<RunnableFile>) -> Result<RunnableFil
         }
 
         if need_rerender {
-            let mut list = FilteredList::new(&all_files_cache, search_str.as_str(), &matcher);
+            let mut list = FilteredList::new(&all_files_cache, search_str, &matcher);
             let mut a = list.iter(page);
 
             items_displayed_on_current_page = list_view::print_view(cursor,
-                                                                    search_str.as_str(),
+                                                                    input_search_str.as_str(),
                                                                     &mut a).unwrap();
             need_rerender = false;
         }
@@ -123,14 +106,14 @@ pub fn run_selection_gui(receiver: Receiver<RunnableFile>) -> Result<RunnableFil
                 Event::Key(event) => {
                     match event.code {
                         Char(c) => {
-                            search_str.push(c);
+                            input_search_str.push(c);
                         },
-                        Backspace => { search_str.pop(); },
+                        Backspace => { input_search_str.pop(); },
 
                         KeyCode::Enter => {
                             let mut list = FilteredList::new(
                                 &all_files_cache,
-                                search_str.as_str(),
+                                input_search_str.as_str(),
                                 &matcher);
                             let mut a = list.iter(page);
                             let it = a.skip(cursor - 1).next();

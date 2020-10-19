@@ -4,6 +4,7 @@ mod runnable_file;
 mod list_view;
 mod selection_gui;
 mod ordered_type;
+mod filtered_list;
 
 use std::{env, fs, io};
 use std::error::Error;
