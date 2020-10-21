@@ -16,7 +16,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7c849cec-32d5-45cd-b80e-912c380ff027" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/cli.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/cli.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alias/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/alias/.idea/alias.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/alias/.idea/deployment.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/alias/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/alias/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/alias/.idea/workspace.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/alias/Cargo.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/alias/Cargo.toml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/alias/src/main.rs" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,14 +85,9 @@
     </key>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" PASS_PARENT_ENVS_2="true">
-      <method v="2">
-        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="run" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
       <option name="channel" value="DEFAULT" />
-      <option name="command" value="run --bin app_find" />
+      <option name="command" value="run --bin ifnd" />
       <option name="allFeatures" value="false" />
       <option name="emulateTerminal" value="false" />
       <option name="backtrace" value="SHORT" />
@@ -123,7 +130,8 @@
       <workItem from="1602962254290" duration="13128000" />
       <workItem from="1603045337202" duration="1139000" />
       <workItem from="1603046495898" duration="20610000" />
-      <workItem from="1603068886931" duration="7044000" />
+      <workItem from="1603068886931" duration="7796000" />
+      <workItem from="1603254914774" duration="367000" />
     </task>
     <task id="LOCAL-00001" summary="some initial file traverse working">
       <created>1602732360447</created>
@@ -163,13 +171,13 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/app_find/src/list_view.rs</url>
+          <url>file://$PROJECT_DIR$/ifnd/src/list_view.rs</url>
           <line>2</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/app_find/src/main.rs</url>
-          <line>58</line>
+          <url>file://$PROJECT_DIR$/ifnd/src/main.rs</url>
+          <line>57</line>
           <option name="timeStamp" value="4" />
         </line-breakpoint>
       </breakpoints>

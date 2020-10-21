@@ -20,7 +20,6 @@ use std::cmp::{min, max, Ordering};
 use fuzzy_matcher::clangd::ClangdMatcher;
 use fuzzy_matcher::FuzzyMatcher;
 use std::collections::{BinaryHeap, BTreeMap};
-use indexmap::set::IndexSet;
 use std::ops::Deref;
 use fuzzy_matcher::skim::SkimMatcherV2;
 

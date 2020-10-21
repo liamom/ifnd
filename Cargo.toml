@@ -1,5 +1,4 @@
 [workspace]
 members = [
-    "alias",
-    "app_find",
+    "ifnd",
 ]
