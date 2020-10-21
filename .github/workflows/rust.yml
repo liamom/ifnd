@@ -37,4 +37,5 @@ jobs:
       with:
         name: build
         path: |
-          target/**/ifnd*
+          target/**/ifnd
+          target/**/ifnd.exe
