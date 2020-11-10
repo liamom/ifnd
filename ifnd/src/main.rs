@@ -1,28 +1,17 @@
-mod traverse;
-mod find_exe;
-mod runnable_file;
 mod list_view;
 mod selection_gui;
 mod ordered_type;
 mod filtered_list;
+mod search;
+mod files;
 
 use std::{env, fs, io};
 use std::error::Error;
-use crate::runnable_file::runnable_file::{RunnableFileTrait, RunnableFile};
 use std::io::Write;
 use std::ffi::OsStr;
-use std::time::Duration;
-use crossterm::event::{poll, read, Event, KeyCode};
-use crossterm::event::KeyCode::{Char, Backspace};
-use std::i32::MAX;
-use std::i8::MIN;
-use std::cmp::{min, max, Ordering};
-use fuzzy_matcher::clangd::ClangdMatcher;
-use fuzzy_matcher::FuzzyMatcher;
-use std::collections::{BinaryHeap, BTreeMap};
-use std::ops::Deref;
-use fuzzy_matcher::skim::SkimMatcherV2;
-
+use crate::selection_gui::FileTypes;
+use crate::files::runnable_file::{RunnableFile, RunnableFileTrait};
+use crate::files::file_base::FileBase;
 
 fn _old() -> Result<(), Box<dyn Error>> {
     let current_dir = env::current_dir()?;
@@ -52,17 +41,13 @@ fn _old() -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-fn main() -> Result<(), Box<dyn Error>> {
-    let finder = find_exe::print_start_menu()?;
-
-    let selection: RunnableFile = selection_gui::run_selection_gui(finder.receiver)?;
-
-    let file_name = selection.get_file_path()
+fn handle_runnable(selection: RunnableFile) -> Result<(), Box<dyn Error>>{
+    let file_name = selection.get_path()
         .file_name()
         .and_then(|v| v.to_str())
         .ok_or("error getting file name")?;
     print!("& {} ", file_name);
-    io::stdout().flush();
+    io::stdout().flush()?;
     let mut args = String::new();
     io::stdin().read_line(&mut args).expect("failed to get args");
 
@@ -76,10 +61,21 @@ fn main() -> Result<(), Box<dyn Error>> {
     let output = command.output()
         .expect("Failed to execture process");
 
-
     println!("status: {}", output.status);
     println!("stdout: {}", String::from_utf8_lossy(&output.stdout));
     println!("stderr: {}", String::from_utf8_lossy(&output.stderr));
 
     Ok(())
+}
+
+fn main() -> Result<(), Box<dyn Error>> {
+    let selection: selection_gui::FileTypes = selection_gui::run_selection_gui()?;
+    match selection {
+        FileTypes::RunnableFile(f) => handle_runnable(f)?,
+        FileTypes::AnyFile(f) => {
+            println!("{}", f.get_path().to_str().ok_or("error")?);
+        },
+    };
+
+    return Ok(());
 }

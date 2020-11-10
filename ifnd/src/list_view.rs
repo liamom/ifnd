@@ -1,22 +1,14 @@
-use crate::runnable_file::runnable_file::{RunnableFile, RunnableFileTrait};
 use std::io::{stdout, Write};
-use crossterm::{execute, queue, style::{self, Colorize}, cursor, terminal, QueueableCommand, ExecutableCommand};
+use crossterm::{style::{self, Colorize}, cursor, terminal, QueueableCommand};
 use crossterm;
 use std::error::Error;
 use crossterm::cursor::{SavePosition, RestorePosition};
-use crate::ordered_type;
 use crate::ordered_type::OrderedSearchMatch;
+use crate::files::file_base::FileBase;
 
-pub fn print_view<'a, I>(cursor_pos: usize,
-                      search_text: &str,
-                      list: &mut I)
-    -> Result<usize, Box<dyn Error>>
-    where I: Iterator<Item = &'a OrderedSearchMatch<'a>>
-{
+pub fn print_input(search_text: &str, start_row: u16) -> Result<(), Box<dyn Error>> {
     let mut stdout = stdout();
 
-    let (total_cols, _) = crossterm::terminal::size()?;
-    let (start_col, start_row) = crossterm::cursor::position()?;
     stdout
         .queue(terminal::DisableLineWrap)?
         .queue(cursor::MoveTo(0, start_row))?
@@ -24,15 +16,32 @@ pub fn print_view<'a, I>(cursor_pos: usize,
 
     {
         let mut iter = search_text.splitn(2, ' ');
+
         if let Some(command) = iter.next() {
-            stdout.queue(style::PrintStyledContent(command.magenta()))?;
-            stdout.queue(style::Print(" "))?;
+            stdout.queue(style::PrintStyledContent("> ".white()))?
+                  .queue(style::PrintStyledContent(command.magenta()))?;
         }
         if let Some(search_str) = iter.next() {
-            stdout.queue(style::PrintStyledContent(search_str.cyan()))?;
+            stdout
+                .queue(style::Print(" "))?
+                .queue(style::PrintStyledContent(search_str.cyan()))?;
         }
     }
     stdout.queue(SavePosition)?;
+
+    Ok(())
+}
+
+pub fn print_results<'a, T, I>(cursor_pos: usize,
+                               list: &mut I,
+                               start_row: u16
+)
+                               -> Result<usize, Box<dyn Error>>
+    where
+        T: FileBase + 'static,
+        I: Iterator<Item = &'a OrderedSearchMatch<&'a T>>
+{
+    let mut stdout = stdout();
 
     let mut counter = 1;
     for ot in list {
@@ -40,7 +49,7 @@ pub fn print_view<'a, I>(cursor_pos: usize,
         let pysical_row = start_row + counter;
 
 
-        let mut list_text = format!("{:>3} ({:>3}): ",
+        let list_text = format!("{:>3} ({:>3}): ",
                 counter,
                 ot.score);
 
@@ -48,7 +57,7 @@ pub fn print_view<'a, I>(cursor_pos: usize,
             stdout
                 .queue(cursor::MoveTo(0, pysical_row))?
                 .queue(terminal::Clear(terminal::ClearType::CurrentLine))?
-                .queue(style::PrintStyledContent( "→".magenta()))?
+                .queue(style::PrintStyledContent( ">".dark_grey()))?
                 .queue(cursor::MoveTo(1, pysical_row))?
                 .queue(style::Print(list_text))?;
         } else {
@@ -59,26 +68,27 @@ pub fn print_view<'a, I>(cursor_pos: usize,
                 .queue(style::Print(list_text))?;
         }
 
-        let full_path = file.get_file_path().to_str().unwrap_or("");
+        let full_path = file.get_search_path();
 
-        let file_name = file.get_file_path().file_name()
-            .and_then(|v| v.to_str())
-            .unwrap_or("");
+        // let file_name = file.get_search_path().file_name()
+        //     .and_then(|v| v.to_str())
+        //     .unwrap_or("");
+        //
+        // let offset = full_path.len() - file_name.len();
+        // for i in 0..file_name.len() {
+        //     let char: char = file_name.chars().nth(i).unwrap();
+        //     if ot.indices.contains(&(i + offset)) {
+        //         stdout.queue(style::PrintStyledContent( char.magenta()))?;
+        //     } else {
+        //         stdout.queue(style::Print( char))?;
+        //     }
+        // }
 
-        let offset = full_path.len() - file_name.len();
-        for i in 0..file_name.len() {
-            let char: char = file_name.chars().nth(i).unwrap();
-            if ot.indices.contains(&(i + offset)) {
-                stdout.queue(style::PrintStyledContent( char.magenta()))?;
-            } else {
-                stdout.queue(style::Print( char))?;
-            }
-        }
+        // stdout
+        //     .queue(cursor::MoveTo(50, pysical_row))?
+        //     .queue(style::Print( "| "))?;
 
-        stdout.queue(cursor::MoveTo(50, pysical_row))?
-              .queue(style::Print( "| "))?;
-
-        for i in 4..full_path.len() {
+        for i in 0..full_path.len() {
             let char: char = full_path.chars().nth(i).unwrap();
             if ot.indices.contains(&i) {
                 stdout.queue(style::PrintStyledContent( char.magenta()))?;
@@ -90,10 +100,27 @@ pub fn print_view<'a, I>(cursor_pos: usize,
 
         counter = counter + 1;
     }
-    stdout
+
+
+    Ok(counter as usize)
+}
+
+pub fn flush() -> Result<(), Box<dyn Error>> {
+    stdout()
         .queue(terminal::Clear(terminal::ClearType::FromCursorDown))?
         .queue(RestorePosition)?
         .flush()?;
 
-    Ok(counter as usize)
+    Ok(())
+}
+
+pub fn reset_terminal(start_row: u16) -> Result<(), Box<dyn Error>> {
+    stdout()
+        .queue(RestorePosition)?
+        .queue(cursor::MoveTo(0, start_row))?
+        .queue(terminal::Clear(terminal::ClearType::CurrentLine))?
+        .queue(terminal::Clear(terminal::ClearType::FromCursorDown))?
+        .flush()?;
+
+    Ok(())
 }

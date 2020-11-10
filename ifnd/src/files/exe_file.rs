@@ -1,8 +1,8 @@
 use std::path::PathBuf;
-use crate::runnable_file::runnable_file::RunnableFileTrait;
 use std::error::Error;
-use std::ffi::OsStr;
 use std::process::Command;
+use crate::files::runnable_file::RunnableFileTrait;
+use crate::files::file_base::FileBase;
 
 #[derive(Debug, Clone)]
 pub struct ExeFile {
@@ -23,8 +23,14 @@ impl RunnableFileTrait for ExeFile {
         let output = Command::new(self.path.to_str().ok_or("could not get path")?);
         Ok(output)
     }
+}
 
-    fn get_file_path(&self) -> &PathBuf {
-        return &self.path;
+impl FileBase for ExeFile {
+    fn get_path(&self) -> &PathBuf {
+        &self.path
+    }
+
+    fn get_search_path(&self) -> &str {
+        self.path.to_str().unwrap()
     }
 }

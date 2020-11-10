@@ -4,9 +4,8 @@ use std::fs;
 use std::convert::TryFrom;
 use std::process::Command;
 use std::error::Error;
-use crate::runnable_file::runnable_file::RunnableFileTrait;
-use std::ffi::OsStr;
-use std::ops::Deref;
+use crate::files::runnable_file::RunnableFileTrait;
+use crate::files::file_base::FileBase;
 
 #[derive(Debug, Clone)]
 pub struct LnkFile {
@@ -40,10 +39,15 @@ impl RunnableFileTrait for LnkFile {
 
         Ok(output)
     }
+}
 
+impl FileBase for LnkFile {
+    fn get_path(&self) -> &PathBuf {
+        &self.path
+    }
 
-    fn get_file_path(&self) -> &PathBuf {
-        return &self.path;
+    fn get_search_path(&self) -> &str {
+        self.path.to_str().unwrap()
     }
 }
 

@@ -16,19 +16,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7c849cec-32d5-45cd-b80e-912c380ff027" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/cli.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/cli.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ifnd/src/files/any_file.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ifnd/src/files/file_base.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ifnd/src/search/app_search.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ifnd/src/search/file_search.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ifnd/src/search/fs/bredth_first_traverse.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ifnd/src/search/fs/depth_first_traverse.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ifnd/src/search/fs/mod.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ifnd/src/search/mod.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ifnd/src/search/search_type.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alias/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/alias/.idea/alias.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/alias/.idea/deployment.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/alias/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/alias/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/alias/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/alias/Cargo.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/alias/Cargo.toml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/alias/src/main.rs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifnd/src/filtered_list.rs" beforeDir="false" afterPath="$PROJECT_DIR$/ifnd/src/filtered_list.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifnd/src/find_exe.rs" beforeDir="false" afterPath="$PROJECT_DIR$/ifnd/src/search/find_exe.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifnd/src/list_view.rs" beforeDir="false" afterPath="$PROJECT_DIR$/ifnd/src/list_view.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifnd/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/ifnd/src/main.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifnd/src/ordered_type.rs" beforeDir="false" afterPath="$PROJECT_DIR$/ifnd/src/ordered_type.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifnd/src/runnable_file/exe_file.rs" beforeDir="false" afterPath="$PROJECT_DIR$/ifnd/src/files/exe_file.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifnd/src/runnable_file/lnk_parser.rs" beforeDir="false" afterPath="$PROJECT_DIR$/ifnd/src/files/lnk_parser.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifnd/src/runnable_file/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/ifnd/src/files/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifnd/src/runnable_file/runnable_file.rs" beforeDir="false" afterPath="$PROJECT_DIR$/ifnd/src/files/runnable_file.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifnd/src/selection_gui.rs" beforeDir="false" afterPath="$PROJECT_DIR$/ifnd/src/selection_gui.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ifnd/src/traverse.rs" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,7 +76,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="true" />
     <property name="cf.first.check.clang-format" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/target/debug/app_find.exe" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/ifnd/src/search" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -80,11 +88,40 @@
     <property name="settings.editor.selected.configurable" value="SQL Resolution Scopes" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Development\rust\cli\ifnd\src\search" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Development\rust\cli\ifnd\src\search\fs" />
+      <recent name="D:\Development\rust\cli\ifnd\src\search" />
       <recent name="D:\Development\rust\cli\app_find\src\runnable_file" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Cargo.run">
+    <configuration name="Test bredth_first_traverse::tests" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
+      <option name="channel" value="DEFAULT" />
+      <option name="command" value="test --package ifnd --bin ifnd search::bredth_first_traverse::tests" />
+      <option name="allFeatures" value="false" />
+      <option name="emulateTerminal" value="false" />
+      <option name="backtrace" value="SHORT" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <envs />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Test search::depth_first_traverse::tests::test_search_dris" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
+      <option name="channel" value="DEFAULT" />
+      <option name="command" value="test --package ifnd --bin ifnd search::depth_first_traverse::tests::test_search_dris -- --exact" />
+      <option name="allFeatures" value="false" />
+      <option name="emulateTerminal" value="false" />
+      <option name="backtrace" value="SHORT" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <envs />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="run" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
       <option name="channel" value="DEFAULT" />
       <option name="command" value="run --bin ifnd" />
@@ -95,7 +132,6 @@
       <envs />
       <method v="2">
         <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
-        <option name="ToolBeforeRunTask" enabled="true" actionId="Tool_External Tools_app_find_exe_dbg" />
       </method>
     </configuration>
     <configuration default="true" type="GradleAppRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" PASS_PARENT_ENVS_2="true">
@@ -103,6 +139,17 @@
         <option name="com.jetbrains.cidr.cpp.gradle.execution.GradleNativeBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="Cargo.run" />
+      <item itemvalue="Cargo.Test bredth_first_traverse::tests" />
+      <item itemvalue="Cargo.Test search::depth_first_traverse::tests::test_search_dris" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Cargo.Test search::depth_first_traverse::tests::test_search_dris" />
+        <item itemvalue="Cargo.Test bredth_first_traverse::tests" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="RustProjectSettings">
     <option name="toolchainHomeDirectory" value="$USER_HOME$/.cargo/bin" />
@@ -131,7 +178,12 @@
       <workItem from="1603045337202" duration="1139000" />
       <workItem from="1603046495898" duration="20610000" />
       <workItem from="1603068886931" duration="7796000" />
-      <workItem from="1603254914774" duration="367000" />
+      <workItem from="1603254914774" duration="3593000" />
+      <workItem from="1603260006465" duration="1721000" />
+      <workItem from="1603316835135" duration="13848000" />
+      <workItem from="1603424853830" duration="1382000" />
+      <workItem from="1603426262926" duration="106000" />
+      <workItem from="1603426384384" duration="10512000" />
     </task>
     <task id="LOCAL-00001" summary="some initial file traverse working">
       <created>1602732360447</created>
@@ -172,19 +224,22 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/ifnd/src/list_view.rs</url>
-          <line>2</line>
+          <line>1</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/ifnd/src/main.rs</url>
-          <line>57</line>
-          <option name="timeStamp" value="4" />
+          <url>file://$PROJECT_DIR$/ifnd/src/selection_gui.rs</url>
+          <line>147</line>
+          <option name="timeStamp" value="33" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <watches-manager>
       <configuration name="app_find">
-        <watch expression="search_str" language="Rust" />
+        <watch expression="search_str" />
+      </configuration>
+      <configuration name="ifnd">
+        <watch expression="state.input_search_str" language="Rust" />
       </configuration>
     </watches-manager>
   </component>
